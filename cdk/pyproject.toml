@@ -1,0 +1,18 @@
+[project]
+name = "cdk"
+version = "0.1.0"
+description = "Deployment for Merlin gen-AI DM infrastructure"
+authors = [
+    {name = "Greg Jones",email = "4853264+gregjones07ba@users.noreply.github.com"}
+]
+readme = "README.md"
+requires-python = "^3.13"
+dependencies = [
+    "aws-cdk-lib (==2.215.0)",
+    "constructs (>=10.0.0,<11.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
