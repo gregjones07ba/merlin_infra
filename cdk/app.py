@@ -3,11 +3,11 @@ import os
 
 import aws_cdk as cdk
 
-from cdk.cdk_stack import CdkStack
+from cdk.merlin_stack import MerlinStack
 
 
 app = cdk.App()
-CdkStack(app, "CdkStack",
+MerlinStack(app, "Merlin",
     env=cdk.Environment(account='580938938844', region='us-east-1'),
 )
 
