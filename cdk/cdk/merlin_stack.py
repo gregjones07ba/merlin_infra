@@ -1,3 +1,5 @@
+from collections.abc import Mapping
+
 from aws_cdk import Stack
 from aws_cdk.aws_lambda import Code, Function, Runtime
 from aws_cdk.aws_s3 import Bucket
@@ -5,7 +7,7 @@ from aws_cdk.aws_dynamodb import TableV2, Attribute, AttributeType
 
 from constructs import Construct
 
-VERSION = '1'
+VERSION = '2'
 
 class MerlinStack(Stack):
 
@@ -39,6 +41,7 @@ class MerlinStack(Stack):
             runtime = Runtime.PYTHON_3_12,
             handler = 'postMessage.lambda_handler',
             code = self._postMessage_code(),
+            environment=self._lambda_environment(),
         )
 
     def _postMessage_code(self) -> Code:
@@ -46,3 +49,8 @@ class MerlinStack(Stack):
             self._bucket,
             f'dist/lambda/postMessages/versions/{VERSION}/lambda.zip',
         )
+
+    def _lambda_environment(self) -> Mapping[str, str]:
+        return {
+            'MESSAGES_TABLE': self._db.table_name,
+        }
