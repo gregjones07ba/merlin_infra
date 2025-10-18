@@ -1,6 +1,7 @@
 from aws_cdk import Stack
 from aws_cdk.aws_lambda import Code, Function, Runtime
 from aws_cdk.aws_s3 import Bucket
+from aws_cdk.aws_dynamodb import TableV2, Attribute, AttributeType
 
 from constructs import Construct
 
@@ -13,16 +14,28 @@ class MerlinStack(Stack):
 
         self._bucket = self._get_bucket()
 
+        self._db = self._create_db()
         self._create_postMessage()
 
     def _get_bucket(self) -> Bucket:
         return Bucket.from_bucket_attributes(self, "Bucket",
             bucket_arn='arn:aws:s3:::merlin-1758dca1a93843f1a03d0b6d8f9277d1',
         )
-        
+
+    def _create_db(self) -> TableV2:
+        return TableV2(self, "messages",
+            partition_key=Attribute(
+                name="game",
+                type=AttributeType.STRING,
+            ),
+            sort_key=Attribute(
+                name="seq",
+                type=AttributeType.NUMBER,
+            ),
+        )
+
     def _create_postMessage(self) -> Function:
-        return Function(
-            self, "postMessage",
+        return Function(self, "postMessage",
             runtime = Runtime.PYTHON_3_12,
             handler = 'postMessage.lambda_handler',
             code = self._postMessage_code(),
