@@ -37,6 +37,11 @@ class MerlinStack(Stack):
         )
 
     def _create_postMessage(self) -> Function:
+        function = self._create_postMessage_function()
+        self._db.grant_read_write_data(function)
+        return function
+
+    def _create_postMessage_function(self) -> Function:
         return Function(self, "postMessage",
             runtime = Runtime.PYTHON_3_12,
             handler = 'postMessage.lambda_handler',
