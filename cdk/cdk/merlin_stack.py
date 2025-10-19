@@ -7,7 +7,7 @@ from aws_cdk.aws_dynamodb import TableV2, Attribute, AttributeType
 
 from constructs import Construct
 
-VERSION = '2'
+API_VERSION = '2'
 
 class MerlinStack(Stack):
 
@@ -52,7 +52,7 @@ class MerlinStack(Stack):
     def _postMessage_code(self) -> Code:
         return Code.from_bucket_v2(
             self._bucket,
-            f'dist/lambda/postMessages/versions/{VERSION}/lambda.zip',
+            f'dist/lambda/postMessages/versions/{API_VERSION}/lambda.zip',
         )
 
     def _lambda_environment(self) -> Mapping[str, str]:
