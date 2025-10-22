@@ -17,8 +17,7 @@ class MerlinStack(Stack):
         self._bucket = self._get_bucket()
 
         self._db = self._create_db()
-        self._create_postMessage()
-        self._create_getMessages()
+        self._create_lambdas()
 
     def _get_bucket(self) -> Bucket:
         return Bucket.from_bucket_attributes(self, "Bucket",
@@ -36,6 +35,10 @@ class MerlinStack(Stack):
                 type=AttributeType.NUMBER,
             ),
         )
+
+    def _create_lambdas(self):
+        self._create_postMessage()
+        self._create_getMessages()
 
     def _create_postMessage(self) -> Function:
         function = self._create_postMessage_function()
