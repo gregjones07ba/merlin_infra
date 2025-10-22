@@ -61,7 +61,7 @@ class MerlinStack(Stack):
 
     def _create_getMessages(self) -> Function:
         function = self._create_getMessages_function()
-        self._db.grant_read_write_data(function)
+        self._db.grant_read_data(function)
         return function
 
     def _create_getMessages_function(self) -> Function:
