@@ -18,6 +18,7 @@ class MerlinStack(Stack):
 
         self._db = self._create_db()
         self._create_postMessage()
+        self._create_getMessages()
 
     def _get_bucket(self) -> Bucket:
         return Bucket.from_bucket_attributes(self, "Bucket",
@@ -53,6 +54,25 @@ class MerlinStack(Stack):
         return Code.from_bucket_v2(
             self._bucket,
             f'dist/lambda/postMessages/versions/{API_VERSION}/lambda.zip',
+        )
+
+    def _create_getMessages(self) -> Function:
+        function = self._create_getMessages_function()
+        self._db.grant_read_write_data(function)
+        return function
+
+    def _create_getMessages_function(self) -> Function:
+        return Function(self, "getMessages",
+            runtime = Runtime.PYTHON_3_12,
+            handler = 'getMessages.lambda_handler',
+            code = self._getMessages_code(),
+            environment=self._lambda_environment(),
+        )
+
+    def _getMessages_code(self) -> Code:
+        return Code.from_bucket_v2(
+            self._bucket,
+            f'dist/lambda/getMessages/versions/{API_VERSION}/lambda.zip',
         )
 
     def _lambda_environment(self) -> Mapping[str, str]:
