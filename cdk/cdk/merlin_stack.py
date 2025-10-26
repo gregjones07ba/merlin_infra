@@ -2,7 +2,7 @@ from collections.abc import Mapping
 from inspect import cleandoc
 
 from aws_cdk import Stack
-from aws_cdk.aws_apigateway import RestApi, Resource, Method, Integration, LambdaIntegration
+from aws_cdk.aws_apigateway import RestApi, Resource, Method, Integration, LambdaIntegration, PassthroughBehavior
 from aws_cdk.aws_lambda import Code, Function, Runtime
 from aws_cdk.aws_s3 import Bucket
 from aws_cdk.aws_dynamodb import TableV2, Attribute, AttributeType
@@ -110,6 +110,7 @@ class MerlinStack(Stack):
         return LambdaIntegration(
             self._getMessages_lambda,
             proxy = False,
+            passthrough_behavior = PassthroughBehavior.NEVER,
             request_parameters = {
                 'integration.request.path.game': 'method.request.path.game',
                 'integration.request.querystring.start': 'method.request.querystring.start',
