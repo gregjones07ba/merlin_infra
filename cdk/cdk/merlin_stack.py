@@ -110,6 +110,11 @@ class MerlinStack(Stack):
         return LambdaIntegration(
             self._getMessages_lambda,
             proxy = False,
+            request_parameters = {
+                'integration.request.path.game': 'method.request.path.game',
+                'integration.request.querystring.start': 'method.request.querystring.start',
+                'integration.request.querystring.end': 'method.request.querystring.end',
+            },
             request_templates = {
                 'application/json': cleandoc('''
                     {
