@@ -1,4 +1,5 @@
 from collections.abc import Mapping
+from inspect import cleandoc
 
 from aws_cdk import Stack
 from aws_cdk.aws_apigateway import RestApi, Resource, Method, Integration, LambdaIntegration
@@ -108,12 +109,15 @@ class MerlinStack(Stack):
     def _messages_get_integration(self) -> Integration:
         return LambdaIntegration(
             self._getMessages_lambda,
+            proxy = False,
             request_templates = {
-                'application/json': '''{
-                    "game": "$input.params('game')",
-                    "start": "$input.params('start')",
-                    "end": "$input.params('end')",
-                }''',
+                'application/json': cleandoc('''
+                    {
+                        "game": "$input.params('game')",
+                        "start": "$input.params('start')",
+                        "end": "$input.params('end')",
+                    }
+                '''),
             }
         )
 
