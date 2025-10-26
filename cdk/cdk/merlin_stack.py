@@ -1,7 +1,7 @@
 from collections.abc import Mapping
 
 from aws_cdk import Stack
-from aws_cdk.aws_apigateway import RestApi, Resource, Method
+from aws_cdk.aws_apigateway import RestApi, Resource, Method, Integration, LambdaIntegration
 from aws_cdk.aws_lambda import Code, Function, Runtime
 from aws_cdk.aws_s3 import Bucket
 from aws_cdk.aws_dynamodb import TableV2, Attribute, AttributeType
@@ -97,11 +97,24 @@ class MerlinStack(Stack):
 
     def _create_messages_get(self, messages_resource: Resource) -> Method:
         return messages_resource.add_method("GET",
+            integration = self._messages_get_integration(),
             request_parameters = {
                 'method.request.path.game' : True,
                 'method.request.querystring.start' : False,
                 'method.request.querystring.end' : False,
             },
+        )
+
+    def _messages_get_integration(self) -> Integration:
+        return LambdaIntegration(
+            self._getMessages_lambda,
+            request_templates = {
+                'application/json': '''{
+                    "game": "$input.params('game')",
+                    "start": "$input.params('start')",
+                    "end": "$input.params('end')",
+                }''',
+            }
         )
 
     def _create_messages_post(self, messages_resource: Resource) -> Method:
