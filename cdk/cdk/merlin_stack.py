@@ -121,7 +121,7 @@ class MerlinStack(Stack):
                     {
                         "game": "$input.params('game')",
                         "start": "$input.params('start')",
-                        "end": "$input.params('end')",
+                        "end": "$input.params('end')"
                     }
                 '''),
             }
